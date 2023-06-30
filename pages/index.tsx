@@ -1,9 +1,31 @@
+import { useState } from 'react'
+import type { MouseEventHandler } from 'react'
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
-
+import { LasyImage } from '@/components/LazyImage'
+const random = (): number => Math.floor(Math.random() * 123) + 1
+const generateId = () => Math.random().toString(36).substring(2, 9)
 const inter = Inter({ subsets: ['latin'] })
 
+type ImageItem = { id: string, url: string }
+
 export default function Home() {
+  const [images, setImages] = useState<Array<ImageItem>>([
+
+  ])
+
+  const addNewFox: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault()
+    const newImageItem: ImageItem =
+    {
+      id: generateId(),
+      url: `https://randomfox.ca/images/${random()}.jpg`
+    }
+    setImages([
+      ...images,
+      newImageItem
+    ])
+  }
   return (
     <>
       <Head>
@@ -14,8 +36,19 @@ export default function Home() {
       </Head>
       <main >
         <h1 className="text-3xl bg-blue-500 font-bold underline" >hola</h1>
+        <button onClick={addNewFox}>Add new fox</button>
+        {images.map(({ id, url }) => (
+          <div key={id} className='p-4'>
+            <LasyImage
+             src={url} 
+             onClick={() => console.log('aqui')} 
+             title='Ramdom Fix' width={320}
+              height="auto" />
+          </div>
+        ))}
 
-    </main >
+
+      </main >
     </>
   )
 }
